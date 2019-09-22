@@ -1,0 +1,43 @@
+{% extends "template.html" %}
+
+{% block content %}
+  <form action="" method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <p>
+      {{ form.titulo.label }} <br />
+      {{ form.titulo(size=115) }}
+      {% for error in form.titulo.error %}
+          {{ error|e }}
+      {% endfor %}
+
+    </p>
+    <p>
+      {{ form.conteudo.label }} <br />
+      {{ form.conteudo(cols=80, rows=10) }}
+      {% for error in form.conteudo.error %}
+          {{ error|e }}
+      {% endfor %}
+    </p>
+    <p>
+      {{ form.publicado.label }} <br />
+      {{ form.publicado }}
+    </p>
+    <p>
+      {{ form.data_publicacao.label }} <br />
+      {{ form.data_publicacao }}
+      {% for error in form.data_publicacao.error %}
+          {{ error|e }}
+      {% endfor %}
+    </p>
+    <p>
+      {{ form.capa.label }} <br />
+      {{ form.capa }}
+      {% for error in form.capa.error %}
+          {{ error|e }}
+      {% endfor %}
+    </p>
+    <p>{{ form.submit() }}</p>
+  </form>
+
+{% endblock %}
