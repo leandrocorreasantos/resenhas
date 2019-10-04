@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField, TextAreaField, SubmitField, BooleanField, DateTimeField,
@@ -8,17 +9,19 @@ from datetime import datetime
 
 
 class ArtigoForm(FlaskForm):
-    titulo = StringField('Título', validators=[DataRequired()])
-    conteudo = TextAreaField('Conteúdo', id='summernote')
+    titulo = StringField(u'Título', validators=[DataRequired()])
+    conteudo = TextAreaField(u'Conteúdo', id='summernote')
     publicado = BooleanField('Publicado')
     data_publicacao = DateTimeField(
-        'Data da Publicação',
+        u'Data da Publicação',
         validators=[DataRequired()],
         default=datetime.now(),
         format='%d/%m/%Y %H:%M')
-    capa = FileField()
-    submit = SubmitField('Enviar')
+    capa = FileField('Capa')
+    list_tags = StringField('Tags')
+    submit = SubmitField('Salvar')
 
 
 class ArtigoEditForm(ArtigoForm):
     id = HiddenField()
+    nova_capa = FileField('Capa')

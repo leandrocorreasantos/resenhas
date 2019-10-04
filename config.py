@@ -1,7 +1,19 @@
+# -*- coding: utf-8 -*-
 import os
+from enum import Enum
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+class MediaConfig(Enum):
+    # upload
+    STATIC_DIR = os.path.join(basedir, 'static')
+    MEDIA_DIR = 'media/'
+    MEDIA_ROOT = os.path.join(STATIC_DIR, 'media')
+    BLOG_IMG_FILE = 'blog/img/artigos'
+    BLOG_IMG_FILE_DEST = os.path.join(MEDIA_ROOT, BLOG_IMG_FILE)
+    BLOG_IMG_FILE_SRC = "{}{}".format(MEDIA_DIR, BLOG_IMG_FILE)
 
 
 class Config(object):
@@ -16,6 +28,6 @@ class Config(object):
     USER_ENABLE_USERNAME = True    # Enable username authentication
     USER_REQUIRE_RETYPE_PASSWORD = False    # Simplify register form
 
-    # upload
-    UPLOAD_FOLDER = 'static/'
+    # MEDIA_ROOT = os.path.join(basedir, 'media')
+    MEDIA_ROOT = MediaConfig.MEDIA_ROOT
     ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])

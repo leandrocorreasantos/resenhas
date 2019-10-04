@@ -1,23 +1,32 @@
-from flask import Flask
-from resenhas import db, migrate, bootstrap
+from flask import Flask, send_from_directory
+from . import db, migrate, bootstrap
+from .config import MediaConfig
 from .errors.handlers import errors
 from .admin.views import admin
 # from .blog.views import blog
-from .config import Config
+# from .config import Config
 from .models import User
 from flask_user import UserManager, login_required
 
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db.init_app(app)
-migrate.init_app(app, db)
-bootstrap.init_app(app)
+def create_app(app_name='app', config_obj='resenhas.config.Config'):
+    app = Flask(app_name)
+    app.config.from_object(config_obj)
+    db.init_app(app)
+    migrate.init_app(app, db)
+    bootstrap.init_app(app)
+    app.register_blueprint(admin)
+    app.register_blueprint(errors)
+    user_manager = UserManager(app, db, User)  # noqa
+    return app
 
-user_manager = UserManager(app, db, User)
 
-app.register_blueprint(errors)
-app.register_blueprint(admin)
+app = create_app(__name__)
+
+
+@app.route('/media/<path:filename>')
+def media(filename):
+    return send_from_directory(MediaConfig.MEDIA_ROOT, filename)
 
 
 # root site
@@ -33,4 +42,4 @@ def members():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port='5000', debug=True)
+    app.run(host='127.0.0.1', port='5000', debug=True, threaded=True)

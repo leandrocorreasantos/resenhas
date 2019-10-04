@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask_user import UserMixin
 from resenhas import db
 from datetime import datetime
@@ -54,8 +55,10 @@ class Artigo(db.Model):
     tags = db.relationship(
         'Tag',
         secondary='artigos_tags',
-        backref=db.backref('artigo', uselist=True),
-        primaryjoin="(Artigo.id == ArtigoTags.artigo_id)"
+        primaryjoin="(Artigo.id == ArtigoTag.artigo_id)",
+        backref=db.backref('artigo', lazy='dynamic'),
+        lazy="dynamic",
+        passive_deletes=True
     )
 
     @property
@@ -63,7 +66,7 @@ class Artigo(db.Model):
         return "{}-{}".format(slugify(self.titulo), self.id)
 
 
-class Tags(db.Model):
+class Tag(db.Model):
     __tablename__ = 'tags'
 
     id = db.Column(db.Integer(), primary_key=True)
@@ -71,16 +74,38 @@ class Tags(db.Model):
     artigos = db.relationship(
         'Artigo',
         secondary='artigos_tags',
-        backref=db.backref('tag'),
-        primaryjoin="(Tag.id == ArtigoTags.tag_id)"
+        primaryjoin="(Tag.id == ArtigoTag.tag_id)",
+        backref=db.backref('tag', lazy='dynamic'),
+        lazy="dynamic"
     )
 
     @property
     def slug(self):
         return '{}'.format(slugify(self.nome))
 
+    def get_or_create_tag(self, tag_name):
+        # verify if tag exists and return id
+        tag = None
+        try:
+            tag = Tag.query.filter(Tag.nome == tag_name.strip()).first()
+        except Exception as e:
+            print("Error while get tag. {}".format(e))
+            return None
+        # if not exists, create then
+        if tag is not None:
+            return tag
 
-class ArtigoTags(db.Model):
+        try:
+            tag = Tag(nome=tag_name.strip())
+            db.session.add(tag)
+            db.session.commit()
+        except Exception as e:
+            print("Error while save tag. {}".format(e))
+
+        return tag
+
+
+class ArtigoTag(db.Model):
     __tablename__ = 'artigos_tags'
 
     id = db.Column(db.Integer(), primary_key=True)
