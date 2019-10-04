@@ -117,4 +117,4 @@ venv/
 .env
 env/
 .idea
-blog/static/img/artigos/
+static/media/blog/img/artigos/*

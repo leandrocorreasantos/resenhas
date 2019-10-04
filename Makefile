@@ -7,6 +7,9 @@ flake8:
 build: _config-env
 	docker-compose up -d
 
+stop:
+	docker-compose down
+
 upgrade-pip:
 	pip install --upgrade pip
 

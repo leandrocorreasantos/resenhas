@@ -1,0 +1,44 @@
+{% macro render_field(field) -%}
+<div class="form-group">
+  {{ field.label }}
+  {{ field(**kwargs)|safe }}
+  {% if field.errors %}
+      <ul class="errors">
+        {% for error in field.errors %}
+            <li>{{ error|e }}</li>
+        {% endfor %}
+      </ul>
+  {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro render_textarea(field) -%}
+  <div class="form-group">
+    <label> {{ field.label }} </label>
+    {{ field(**kwargs) }}
+    <ul class="errors">
+      {% for error in field.errors %}
+        <li>{{ error|e }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{%- endmacro %}
+
+<!-- https://john.soban.ski/pass-bootstrap-html-attributes-to-flask-wtforms.html -->
+<!-- https://demos.creative-tim.com/light-bootstrap-dashboard/documentation/tutorial-components.html#tutorial-row -->
+{% macro render_checkbox(field, span_class=None) -%}
+<div class="form-check">
+  <label class="form-check-label">
+    {{ field.label }}<br />
+    {{ field(**kwargs) }}
+    {% if span_class %}
+      <span class="{{ span_class }}"></span>
+    {% endif %}
+  </label>
+  <ul class="errors">
+    {% for error in field.errors %}
+      <li>{{ error|e }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{%- endmacro %}
