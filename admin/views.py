@@ -3,7 +3,7 @@ import os
 from flask import (
     Blueprint, render_template, url_for, request, flash, redirect
 )
-from flask_user import login_required
+from flask_user import login_required, roles_required
 from resenhas.models import Artigo, Tag
 from resenhas.config import MediaConfig
 from .forms import ArtigoForm, ArtigoEditForm
@@ -22,6 +22,8 @@ admin = Blueprint(
 
 @admin.route('/')
 @admin.route('/artigos')
+@login_required
+@roles_required(['admin', 'editor', 'writer'])
 def list_artigos():
     artigos = Artigo.query.all()
     return render_template(
@@ -31,6 +33,7 @@ def list_artigos():
 
 @admin.route('/artigos/novo', methods=['GET', 'POST'])
 @login_required
+@roles_required(['admin', 'writer'])
 def novo_artigo():
     form = ArtigoForm(request.form)
     if form.validate_on_submit() and request.method == 'POST':
@@ -65,6 +68,8 @@ def novo_artigo():
 
 
 @admin.route('/artigos/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+@roles_required(['admin', 'editor', 'writer'])
 def edit_artigo(id):
     old_capa = None
     old_artigo = None
@@ -77,27 +82,30 @@ def edit_artigo(id):
             old_artigo.capa
         )
         form.populate_obj(artigo)
-        if request.files['nova_capa'] is not None:
-            file = request.files['nova_capa']
-            if file and file.filename is not None:
-                filename = secure_filename(file.filename)
-                path_file = os.path.join(
-                    MediaConfig.BLOG_IMG_FILE_DEST.value,
-                    filename
-                )
-                try:
-                    file.save(path_file)
-                except Exception as e:
-                    flash("Erro ao enviar arquivo. {}".format(e), "error")
 
-                try:
-                    os.unlink(old_capa)
-                except Exception as e:
-                    flash("Erro ao excluir capa antiga. {}".format(e), "error")
-                artigo.capa = "{}/{}".format(
-                    MediaConfig.BLOG_IMG_FILE_SRC.value, filename
-                )
-        # saving the tags
+        # saving new cover
+        file = request.files.get('nova_capa', None)
+        if file and file.filename is not None:
+            filename = secure_filename(file.filename)
+            path_file = os.path.join(
+                MediaConfig.BLOG_IMG_FILE_DEST.value,
+                filename
+            )
+
+            try:
+                file.save(path_file)
+            except Exception as e:
+                flash("Erro ao enviar arquivo. {}".format(e), "error")
+
+            try:
+                os.unlink(old_capa)
+            except Exception as e:
+                flash("Erro ao excluir capa antiga. {}".format(e), "error")
+            artigo.capa = "{}/{}".format(
+                MediaConfig.BLOG_IMG_FILE_SRC.value, filename
+            )
+
+        # saving tags
         tag = Tag()
         list_tags = map(lambda x: x.strip(), form.list_tags.data.split(','))
         old_tags = []
@@ -107,7 +115,7 @@ def edit_artigo(id):
                 artigo.tags.remove(t)
         for item in list_tags:
             new_tag = tag.get_or_create_tag(item)
-            if new_tag.nome not in old_tags:
+            if new_tag and new_tag.nome not in old_tags:
                 artigo.tags.append(new_tag)
         try:
             db.session.add(artigo)
@@ -128,7 +136,9 @@ def edit_artigo(id):
     )
 
 
-@admin.route('/artigos/<int:id>/delete', methods=['GET', 'POST', 'DELETE'])
+@admin.route('/artigos/<int:id>/delete', methods=['POST', 'DELETE'])
+@login_required
+@roles_required(['admin', 'editor', 'writer'])
 def delete_artigo(id):
     artigo = Artigo.query.get(id)
     capa_artigo = None

@@ -87,20 +87,24 @@ class Tag(db.Model):
         # verify if tag exists and return id
         tag = None
         try:
-            tag = Tag.query.filter(Tag.nome == tag_name.strip()).first()
+            tag = db.session.query(Tag).filter_by(
+                nome=tag_name
+            ).first()
         except Exception as e:
             print("Error while get tag. {}".format(e))
-            return None
-        # if not exists, create then
-        if tag is not None:
+            # return None
+
+        if tag:
             return tag
 
+        # if not exists, create then
         try:
-            tag = Tag(nome=tag_name.strip())
+            tag = Tag(nome=tag_name)
             db.session.add(tag)
             db.session.commit()
         except Exception as e:
             print("Error while save tag. {}".format(e))
+            # return None
 
         return tag
 
