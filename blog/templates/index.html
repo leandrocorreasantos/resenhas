@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="site-main-container">
+  <!-- Start top-post Area -->
+  <section class="top-post-area pt-10">
+    <div class="container no-padding">
+      <div class="row small-gutters">
+        <div class="col-lg-8 top-post-left">
+          <div class="feature-image-thumb relative">
+            <div class="overlay overlay-bg"></div>
+            <img class="img-fluid" src="{{ url_for('static', filename=destaque.capa) }}" alt="">
+          </div>
+          <div class="top-post-details">
+            <ul class="tags">
+              {% for tag in destaque.tags %}
+                <li><a href="#">{{ tag.nome }}</a></li>
+              {% endfor %}
+            </ul>
+            <a href="{{ url_for('blog.artigo', id=destaque.id, slug=destaque.slug) }}">
+              <h3>{{ destaque.titulo }}</h3>
+            </a>
+            <ul class="meta">
+              <li><a href="#"><span class="lnr lnr-user"></span>{{ destaque.user.first_name }}</a></li>
+              <li><a href="#"><span class="lnr lnr-calendar-full"></span>{{ destaque.data_publicacao.strftime('%d-%m-%Y %H:%M') }}</a></li>
+              <li><a href="#"><span class="lnr lnr-eye"></span>{{ destaque.cliques }} Visualizações</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-4 top-post-right">
+          <div class="single-top-post">
+            <div class="feature-image-thumb relative">
+              <div class="overlay overlay-bg"></div>
+              <img class="img-fluid" src="{{ url_for('static', filename=destaques[0].capa) }}" alt="">
+            </div>
+            <div class="top-post-details">
+              <ul class="tags">
+                {% for tag in destaques[0].tags %}
+                <li><a href="#">{{ tag.nome }}</a></li>
+                {% endfor %}
+              </ul>
+              <a href="{{ url_for('blog.artigo', id=destaques[0].id, slug=destaques[0].slug) }}">
+                <h4>{{ destaques[0].titulo }}</h4>
+              </a>
+              <ul class="meta">
+                <li><a href="#"><span class="lnr lnr-user"></span>{{ destaques[0].user.first_name }}</a></li>
+                <li><a href="#"><span class="lnr lnr-calendar-full"></span>{{ destaques[0].data_publicacao.strftime('%d-%m-%Y %H:%M') }}</a></li>
+                <li><a href="#"><span class="lnr lnr-eye"></span>{{ destaques[0].cliques }} Visualizações</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="single-top-post mt-10">
+            <div class="feature-image-thumb relative">
+              <div class="overlay overlay-bg"></div>
+              <img class="img-fluid" src="{{ url_for('static', filename=destaques[1].capa) }}" alt="">
+            </div>
+            <div class="top-post-details">
+              <ul class="tags">
+                {% for tag in destaques[0].tags %}
+                <li><a href="#">{{ tag.nome }}</a></li>
+                {% endfor %}
+              </ul>
+              <a href="{{ url_for('blog.artigo', id=destaques[1].id, slug=destaques[1].slug) }}">
+                <h4>{{ destaques[1].titulo }}</h4>
+              </a>
+              <ul class="meta">
+                <ul class="meta">
+                  <li><a href="#"><span class="lnr lnr-user"></span>{{ destaques[1].user.first_name }}</a></li>
+                  <li><a href="#"><span class="lnr lnr-calendar-full"></span>{{ destaques[1].data_publicacao.strftime('%d-%m-%Y %H:%M') }}</a></li>
+                  <li><a href="#"><span class="lnr lnr-eye"></span>{{ destaques[1].cliques }} Visualizações</a></li>
+                </ul>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End top-post Area -->
+  <!-- Start latest-post Area -->
+  <section class="latest-post-area pb-120">
+    <div class="container no-padding">
+      <div class="row">
+        <div class="col-lg-8 post-list">
+          <!-- Start latest-post Area -->
+          <div class="latest-post-wrap">
+            <h4 class="cat-title">Mais Recentes</h4>
+            {% for artigo in artigos %}
+            <div class="single-latest-post row align-items-center">
+              <div class="col-lg-5 post-left">
+                <div class="feature-img relative">
+                  <div class="overlay overlay-bg"></div>
+                  <img class="img-fluid" src="{{ url_for('static', filename=artigo.capa) }}" alt="">
+                </div>
+                <ul class="tags">
+                  {% for tag in artigo.tags %}
+                    <li><a href="#">{{ tag.nome }}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="col-lg-7 post-right">
+                <a href="{{ url_for('blog.artigo', id=artigo.id, slug=artigo.slug) }}">
+                  <h4>{{ artigo.titulo }}</h4>
+                </a>
+                <ul class="meta">
+                  <li><a href="#"><span class="lnr lnr-user"></span>{{ artigo.user.first_name }}</a></li>
+                  <li><a href="#"><span class="lnr lnr-calendar-full"></span>{{ artigo.data_publicacao.strftime('%d-%m-%Y %H:%M') }}</a></li>
+                  <li><a href="#"><span class="lnr lnr-eye"></span>{{ artigo.cliques }} Visualizações</a></li>
+                </ul>
+                <p class="excert">
+                  {{ artigo.conteudo|striptags|truncate(120) }}
+                </p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <!-- End latest-post Area -->
+
+          <!-- Start banner-ads Area -->
+          <div class="col-lg-12 ad-widget-wrap mt-30 mb-30">
+            <img class="img-fluid" src="{{ url_for('static', filename='blog/img/banner-ad.jpg') }}" alt="">
+          </div>
+          <!-- End banner-ads Area -->
+
+          <!-- Start relavent-story-post Area -->
+          <div class="relavent-story-post-wrap mt-30">
+            <h4 class="title">Mais Populares</h4>
+            <div class="relavent-story-list-wrap">
+              {% for popular in populares %}
+              <div class="single-relavent-post row align-items-center">
+                <div class="col-lg-5 post-left">
+                  <div class="feature-img relative">
+                    <div class="overlay overlay-bg"></div>
+                    <img class="img-fluid" src="{{ url_for('static', filename=popular.capa) }}" alt="">
+                  </div>
+                  <ul class="tags">
+                    {% for tag in popular.tags %}
+                    <li><a href="#">{{ tag.nome }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+                <div class="col-lg-7 post-right">
+                  <a href="image-post.html">
+                    <h4>{{ popular.titulo }}</h4>
+                  </a>
+                  <ul class="meta">
+                    <li><a href="#"><span class="lnr lnr-user"></span>{{ popular.user.first_name }}</a></li>
+                    <li><a href="#"><span class="lnr lnr-calendar-full"></span>{{ popular.data_publicacao.strftime('%d-%m-%Y %H:%M') }}</a></li>
+                    <li><a href="#"><span class="lnr lnr-eye"></span>{{ popular.cliques }} Visualizações</a></li>
+                  </ul>
+                  <p class="excert">
+                    {{ popular.conteudo|striptags|truncate(120) }}
+                  </p>
+                </div>
+              </div>
+              {% endfor %}
+
+            </div>
+          </div>
+          <!-- End relavent-story-post Area -->
+
+          <!-- Start banner-ads Area -->
+          <div class="col-lg-12 ad-widget-wrap mt-30 mb-30">
+            <img class="img-fluid" src="{{ url_for('static', filename='blog/img/banner-ad.jpg') }}" alt="">
+          </div>
+          <!-- End banner-ads Area -->
+
+        </div>
+        {% include "sidebar.html" %}
+      </div>
+    </div>
+  </section>
+  <!-- End latest-post Area -->
+</div>
+{% endblock %}

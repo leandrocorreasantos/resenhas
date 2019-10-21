@@ -9,6 +9,7 @@ from resenhas.config import MediaConfig
 from .forms import ArtigoForm, ArtigoEditForm
 from resenhas import db
 from werkzeug.utils import secure_filename
+from flask_user import current_user
 
 
 admin = Blueprint(
@@ -39,6 +40,7 @@ def novo_artigo():
     if form.validate_on_submit() and request.method == 'POST':
         artigo = Artigo()
         form.populate_obj(artigo)
+        artigo.user_id = current_user.id
         file = request.files['capa']
         if file and file.filename != '':
             filename = secure_filename(file.filename)
@@ -77,10 +79,11 @@ def edit_artigo(id):
     form = ArtigoEditForm(obj=artigo)
     if request.method == 'POST' and form.validate_on_submit():
         old_artigo = Artigo.query.get_or_404(form.id.data)
-        old_capa = os.path.join(
-            MediaConfig.STATIC_DIR.value,
-            old_artigo.capa
-        )
+        if old_artigo.capa:
+            old_capa = os.path.join(
+                MediaConfig.STATIC_DIR.value,
+                old_artigo.capa
+            )
         form.populate_obj(artigo)
 
         # saving new cover
@@ -108,14 +111,10 @@ def edit_artigo(id):
         # saving tags
         tag = Tag()
         list_tags = map(lambda x: x.strip(), form.list_tags.data.split(','))
-        old_tags = []
-        for t in old_artigo.tags:
-            old_tags.append(t.nome.strip())
-            if t.nome.strip() not in list_tags:
-                artigo.tags.remove(t)
+        artigo.tags = []
         for item in list_tags:
             new_tag = tag.get_or_create_tag(item)
-            if new_tag and new_tag.nome not in old_tags:
+            if new_tag:
                 artigo.tags.append(new_tag)
         try:
             db.session.add(artigo)
@@ -132,7 +131,8 @@ def edit_artigo(id):
     form.list_tags.data = ', '.join(list_tags)
     return render_template(
         'artigo_edit.html',
-        form=form, artigo=artigo
+        form=form,
+        artigo=artigo
     )
 
 

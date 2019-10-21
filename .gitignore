@@ -118,3 +118,6 @@ venv/
 env/
 .idea
 static/media/blog/img/artigos/*
+
+# mysql database
+mysql-data/
