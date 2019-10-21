@@ -15,7 +15,9 @@
     </div>
     <div class="col-lg-4 col-md-4">
       {{ render_field(form.list_tags, class='form-control') }}
-      <img src="{{ url_for('static', filename=artigo.capa) }}" alt="Capa" width="100%" height="30%" /><br />
+      {% if artigo.capa %}
+        <img src="{{ url_for('static', filename=artigo.capa) }}" alt="Capa" width="100%" height="30%" /><br />
+      {% endif %}
       {{ render_field(form.nova_capa, class='form-control') }}
       {{ render_field(form.data_publicacao, class='form-control') }}
       {{ render_checkbox(form.publicado, class="form-check-input", span_class="form-check-sign") }}

@@ -3,10 +3,10 @@ from . import db, migrate, bootstrap
 from .config import MediaConfig
 from .errors.handlers import errors
 from .admin.views import admin
-# from .blog.views import blog
+from .blog.views import blog
 # from .config import Config
 from .models import User
-from flask_user import UserManager, login_required
+from flask_user import UserManager
 
 
 def create_app(app_name='app', config_obj='resenhas.config.Config'):
@@ -16,6 +16,7 @@ def create_app(app_name='app', config_obj='resenhas.config.Config'):
     migrate.init_app(app, db)
     bootstrap.init_app(app)
     app.register_blueprint(admin)
+    app.register_blueprint(blog)
     app.register_blueprint(errors)
     user_manager = UserManager(app, db, User)  # noqa
     return app
@@ -29,16 +30,16 @@ def media(filename):
     return send_from_directory(MediaConfig.MEDIA_ROOT, filename)
 
 
-# root site
-@app.route('/')
-def index():
-    return "index"
-
-
-@app.route('/members')
-@login_required
-def members():
-    return "members only"
+# # root site
+# @app.route('/')
+# def index():
+#     return "index"
+#
+#
+# @app.route('/members')
+# @login_required
+# def members():
+#     return "members only"
 
 
 if __name__ == '__main__':

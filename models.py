@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
         'is_active', db.Boolean(), nullable=False, server_default='1'
     )
     username = db.Column(db.String(100), nullable=False, unique=True)
-    password = db.Column(db.String(255), nullable=False, server_default='')
+    password = db.Column(db.String(255), nullable=False)
     email_confirmed_at = db.Column(db.DateTime())
     # User information
     first_name = db.Column(db.String(100), nullable=False, server_default='')
@@ -52,6 +52,7 @@ class Artigo(db.Model):
     publicado = db.Column(db.Boolean(), server_default='0')
     data_publicacao = db.Column(db.DateTime(), default=datetime.now())
     data_atualizacao = db.Column(db.DateTime(), onupdate=datetime.now())
+    cliques = db.Column(db.Integer())
     tags = db.relationship(
         'Tag',
         secondary='artigos_tags',
@@ -60,10 +61,17 @@ class Artigo(db.Model):
         lazy="dynamic",
         passive_deletes=True
     )
+    user_id = db.Column(db.Integer(), db.ForeignKey(
+        'users.id', ondelete='SET NULL'
+    ))
+    user = db.relationship(
+        'User',
+        backref=db.backref('users', lazy='dynamic')
+    )
 
     @property
     def slug(self):
-        return "{}-{}".format(slugify(self.titulo), self.id)
+        return slugify(self.titulo)
 
 
 class Tag(db.Model):
