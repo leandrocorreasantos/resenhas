@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from flask_mail import Message
+from resenhas import mail
 from flask import (
-    Blueprint, render_template
+    Blueprint, render_template, request, flash, redirect, url_for
 )
 from resenhas.models import Artigo
 from resenhas import db
 from sqlalchemy import func
+from .forms import ContatoForm
 
 
 blog = Blueprint(
@@ -52,7 +55,7 @@ def artigo(slug, id):
     except Exception as e:
         print('Error while get artigo: {}'.format(e))
 
-    artigo.cliques += 1
+    artigo.cliques = int(artigo.cliques) + 1
 
     try:
         db.session.add(artigo)
@@ -97,9 +100,27 @@ def artigo(slug, id):
     )
 
 
-@blog.route('/contato')
+@blog.route('/contato', methods=['GET', 'POST'])
 def contato():
-    return render_template('contato.html')
+    form = ContatoForm(request.form)
+    if request.method == 'POST':
+        # enviar mensagem via email
+        msg = Message(
+            form.assunto.data,
+            sender=(form.nome.data, form.email.data),
+            recipients=['contato@resenhasdefilmes.com']
+        )
+        print(msg)
+        msg.body = form.mensagem.data
+        try:
+            with mail.connect() as conn:
+                conn.send(msg)
+            flash('Mensagem enviada com sucesso!', 'success')
+        except Exception as e:
+            print("Erro ao enviar mensagem: {}".format(e))
+
+        redirect(url_for('blog.index'))
+    return render_template('contato.html', form=form)
 
 
 @blog.context_processor
