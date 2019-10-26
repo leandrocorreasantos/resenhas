@@ -27,6 +27,12 @@ class Config(object):
     USER_ENABLE_EMAIL = False      # Disable email authentication
     USER_ENABLE_USERNAME = True    # Enable username authentication
     USER_REQUIRE_RETYPE_PASSWORD = False    # Simplify register form
+    # flask-mail @TODO: change parameters on deploy
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
     # MEDIA_ROOT = os.path.join(basedir, 'media')
     MEDIA_ROOT = MediaConfig.MEDIA_ROOT

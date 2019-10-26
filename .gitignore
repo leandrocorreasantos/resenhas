@@ -120,4 +120,4 @@ env/
 static/media/blog/img/artigos/*
 
 # mysql database
-mysql-data/
+mysql/

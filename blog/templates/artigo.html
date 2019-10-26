@@ -12,7 +12,7 @@
             <h1 class="text-white">{{ artigo.titulo }}</h1>
             <p class="text-white link-nav">
               <a href="/">Artigos </a><span class="lnr lnr-arrow-right"></span>
-              <a href="standard-post.html">{{ artigo.titulo }}</a>
+              <a href="#">{{ artigo.titulo }}</a>
             </p>
           </div>
         </div>
@@ -49,16 +49,16 @@
               {{ artigo.conteudo|safe }}
 
             <div class="navigation-wrap justify-content-between d-flex">
-              {% if anterior %}
-              <a class="prev" href="{{ url_for('blog.artigo', id=anterior.id, slug=anterior.slug) }}">
-                <span class="lnr lnr-arrow-left"></span>{{ anterior.titulo }}
-              </a>
-              {% endif %}
-              {% if proximo %}
-              <a class="next" href="{{ url_for('blog.artigo', id=proximo.id, slug=proximo.slug) }}">
-                  {{ proximo.titulo }}<span class="lnr lnr-arrow-right"></span>
-              </a>
-              {% endif %}
+                {% if anterior %}
+                <a class="prev" href="{{ url_for('blog.artigo', id=anterior.id, slug=anterior.slug) }}">
+                    <span class="lnr lnr-arrow-left"></span>{{ anterior.titulo }}
+                </a>
+                {% endif %}
+                {% if proximo %}
+                <a class="next" href="{{ url_for('blog.artigo', id=proximo.id, slug=proximo.slug) }}">
+                    {{ proximo.titulo }}<span class="lnr lnr-arrow-right"></span>
+                </a>
+                {% endif %}
             </div>
 
             <div class="comment-sec-area">
@@ -67,7 +67,6 @@
                   <h6>Comentários</h6>
 
                   <div id="disqus_thread"></div>
-
 
                 </div>
               </div>

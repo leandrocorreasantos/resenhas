@@ -1,5 +1,5 @@
 from flask import Flask, send_from_directory
-from . import db, migrate, bootstrap
+from . import db, migrate, bootstrap, mail
 from .config import MediaConfig
 from .errors.handlers import errors
 from .admin.views import admin
@@ -14,6 +14,7 @@ def create_app(app_name='app', config_obj='resenhas.config.Config'):
     app.config.from_object(config_obj)
     db.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
     bootstrap.init_app(app)
     app.register_blueprint(admin)
     app.register_blueprint(blog)
@@ -28,18 +29,6 @@ app = create_app(__name__)
 @app.route('/media/<path:filename>')
 def media(filename):
     return send_from_directory(MediaConfig.MEDIA_ROOT, filename)
-
-
-# # root site
-# @app.route('/')
-# def index():
-#     return "index"
-#
-#
-# @app.route('/members')
-# @login_required
-# def members():
-#     return "members only"
 
 
 if __name__ == '__main__':
