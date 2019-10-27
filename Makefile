@@ -8,7 +8,7 @@ build: _config-env
 	docker-compose up -d
 
 stop:
-	docker-compose down
+	docker-compose stop
 
 upgrade-pip:
 	pip install --upgrade pip

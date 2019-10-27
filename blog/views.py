@@ -20,32 +20,60 @@ blog = Blueprint(
 
 
 @blog.route('/')
+@blog.route('/artigos')
 def index():
+    destaque = []
+    destaques = []
+    artigos = []
+
+    page = int(request.args.get('page', 1))
+    offset = 10
+    if page == 1:
+        offset += 3
+
     artigos = Artigo.query.filter(
         Artigo.data_publicacao < datetime.now()
     ).filter(
         Artigo.publicado.is_(True)
     ).order_by(
-        Artigo.data_publicacao
-    ).limit(13).all()
+        Artigo.data_publicacao.desc()
+    ).paginate(page, offset).items
 
-    destaque = artigos[0]
-    destaques = artigos[1:3]
-    artigos = artigos[3:10]
+    if request.is_xhr:
+        return render_template('_list_artigos.html', artigos=artigos)
 
-    populares = Artigo.query.filter(
-        Artigo.data_publicacao < datetime.now()
-    ).filter(
-        Artigo.publicado.is_(True)
-    ).order_by(
-        Artigo.cliques
-    ).limit(10)
+    if artigos:
+        destaque = artigos[0]
+        destaques = artigos[1:3]
+        artigos = artigos[3:10]
 
     return render_template(
         'index.html',
-        destaque=destaque, destaques=destaques, artigos=artigos,
-        populares=populares
+        destaque=destaque, destaques=destaques, artigos=artigos
     )
+
+
+@blog.route('/busca')
+def busca():
+    offset = 10
+    page = int(request.args.get('page', 1))
+    q = str(request.args.get('q', None))
+
+    if len(q) == 0:
+        return redirect(url_for('blog.index'))
+
+    artigos = Artigo.query.filter(
+        Artigo.titulo.ilike('%{}%'.format(q))
+    ).filter(
+        Artigo.publicado.is_(True)
+    ).filter(
+        Artigo.data_publicacao < datetime.now()
+    ).paginate(page, offset).items
+
+    if request.is_xhr:
+        return render_template('_list_artigos.html', artigos=artigos)
+
+    return render_template('search.html', artigos=artigos, q=q)
 
 
 @blog.route('/artigo/<slug>-<id>')
@@ -110,7 +138,6 @@ def contato():
             sender=(form.nome.data, form.email.data),
             recipients=['contato@resenhasdefilmes.com']
         )
-        print(msg)
         msg.body = form.mensagem.data
         try:
             with mail.connect() as conn:
@@ -120,6 +147,7 @@ def contato():
             print("Erro ao enviar mensagem: {}".format(e))
 
         redirect(url_for('blog.index'))
+
     return render_template('contato.html', form=form)
 
 
@@ -129,7 +157,7 @@ def artigos_recentes():
         Artigo.data_publicacao < datetime.now()
     ).filter(
         Artigo.publicado.is_(True)
-    ).order_by(Artigo.data_publicacao).limit(4)
+    ).order_by(Artigo.data_publicacao.desc()).limit(4)
     return {'artigos_recentes': recentes}
 
 
