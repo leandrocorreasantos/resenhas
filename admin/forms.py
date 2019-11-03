@@ -16,7 +16,12 @@ class ArtigoForm(FlaskForm):
         u'Data da Publicação',
         validators=[DataRequired()],
         default=datetime.now(),
-        format='%d/%m/%Y %H:%M:%S')
+        format='%d/%m/%Y %H:%M:%S'
+    )
+    data_atualizacao = DateTimeField(
+        u'Data de Atualização',
+        default=datetime.now()
+    )
     capa = FileField('Capa')
     list_tags = StringField('Tags')
     submit = SubmitField('Salvar')

@@ -33,7 +33,8 @@ class Config(object):
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-
+    # SITEMAP
+    SITEMAP_INCLUDE_RULES_WITHOUT_PARAMS = True
     # MEDIA_ROOT = os.path.join(basedir, 'media')
     MEDIA_ROOT = MediaConfig.MEDIA_ROOT
     ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
