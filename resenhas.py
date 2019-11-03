@@ -97,5 +97,10 @@ def media(filename):
     return send_from_directory('static/media/', filename)
 
 
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory('static', 'robots.txt')
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port='5000', debug=True, threaded=True)
