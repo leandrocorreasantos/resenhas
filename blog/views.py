@@ -3,7 +3,8 @@ from datetime import datetime
 from flask_mail import Message
 from resenhas import mail
 from flask import (
-    Blueprint, render_template, request, flash, redirect, url_for
+    Blueprint, render_template, request, flash,
+    redirect, url_for
 )
 from resenhas.models import Artigo
 from resenhas import db
@@ -20,7 +21,6 @@ blog = Blueprint(
 
 
 @blog.route('/')
-@blog.route('/artigos')
 def index():
     destaque = []
     destaques = []

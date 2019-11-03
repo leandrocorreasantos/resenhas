@@ -1,11 +1,14 @@
-from flask import Flask, send_from_directory
+# import os
+from sqlalchemy.sql.expression import extract
+from sqlalchemy import distinct
+from datetime import datetime
+from flask import Flask, send_from_directory, render_template, make_response
 from . import db, migrate, bootstrap, mail
 from .config import MediaConfig
 from .errors.handlers import errors
 from .admin.views import admin
 from .blog.views import blog
-# from .config import Config
-from .models import User
+from .models import User, Artigo
 from flask_user import UserManager
 
 
@@ -24,6 +27,67 @@ def create_app(app_name='app', config_obj='resenhas.config.Config'):
 
 
 app = create_app(__name__)
+
+
+@app.route('/sitemap-<int:year>.xml')
+def sitemap_by_year(year):
+    artigos = Artigo.query.filter(
+        Artigo.publicado.is_(True)
+    ).filter(
+        extract('year', Artigo.data_publicacao) == year
+    ).filter(
+        Artigo.data_publicacao < datetime.now()
+    ).order_by(
+        Artigo.data_publicacao.desc()
+    ).all()
+    sitemap_xml = render_template(
+        'sitemap_template.xml', artigos=artigos
+    )
+    response = make_response(sitemap_xml)
+    response.headers['Content-Type'] = 'application/xml'
+
+    return response
+
+
+@app.route('/sitemap.xml')
+def static_sitemap():
+    sitemap = render_template('sitemap_static.xml')
+    response = make_response(sitemap)
+    response.headers['Content-Type'] = 'application/xml'
+
+    return response
+
+
+@app.route('/sitemaps.xml')
+def sitemap():
+    years = Artigo.query.with_entities(
+        distinct(extract('year', Artigo.data_publicacao))
+    ).filter(
+        Artigo.publicado.is_(True)
+    ).all()
+    sitemap_xml = render_template(
+        'sitemap_list.xml', years=years
+    )
+    response = make_response(sitemap_xml)
+    response.headers['Content-Type'] = 'application/xml'
+
+    return response
+
+
+@app.route('/feed.rss')
+def feed_rss():
+    artigos = Artigo.query.filter(
+        Artigo.publicado.is_(True)
+    ).filter(
+        Artigo.data_publicacao < datetime.now()
+    ).order_by(
+        Artigo.data_publicacao.desc()
+    ).paginate(1, 20).items
+    feed = render_template('rss.xml', artigos=artigos)
+    response = make_response(feed)
+    response.headers['Content-Type'] = 'application/xml'
+
+    return response
 
 
 @app.route('/media/<path:filename>')
