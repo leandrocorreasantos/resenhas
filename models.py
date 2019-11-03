@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     )
     username = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
     email_confirmed_at = db.Column(db.DateTime())
     # User information
     first_name = db.Column(db.String(100), nullable=False, server_default='')

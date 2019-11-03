@@ -24,17 +24,17 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # flask-user
     USER_APP_NAME = "Resenhas de Filmes"
-    USER_ENABLE_EMAIL = False      # Disable email authentication
+    USER_ENABLE_EMAIL = True      # Disable email authentication
     USER_ENABLE_USERNAME = True    # Enable username authentication
     USER_REQUIRE_RETYPE_PASSWORD = False    # Simplify register form
+    USER_ENABLE_REGISTER = True
+    USER_EMAIL_SENDER_EMAIL = 'contato@resenhasdefilmes.com.br'
+    USER_EMAIL_SENDER_NAME = 'Resenhas de Filmes'
     # flask-mail @TODO: change parameters on deploy
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 465
+    MAIL_SERVER = os.environ.get('MAIL_SMTP_SERVER')
+    MAIL_PORT = os.environ.get('MAIL_SMTP_PORT')
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    # SITEMAP
-    SITEMAP_INCLUDE_RULES_WITHOUT_PARAMS = True
-    # MEDIA_ROOT = os.path.join(basedir, 'media')
     MEDIA_ROOT = MediaConfig.MEDIA_ROOT
     ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
