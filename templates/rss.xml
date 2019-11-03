@@ -1,0 +1,24 @@
+<rss version="2.0">
+	<channel>
+		<generator>Resenhas de Filmes</generator>
+		<title>Resenhas de Filmes</title>
+		<link>{{ site }}</link>
+		<description>Resenhas de filmes e séries</description>
+		<language> pt-br </language>
+		<webMaster>contato@resenhasdefilmes.com.br</webMaster>
+        {% for artigo in artigos %}
+    		<item>
+        		<title>{{ artigo.titulo }}</title>
+        		<pubDate>{{ artigo.data_publicacao.strftime("%a, %d %b %Y %H:%M:%S") }}</pubDate>
+        		<description>
+                    {{ artigo.conteudo|striptags|truncate(360) }}
+        		</description>
+        		<link>{{ site }}{{ url_for('blog.artigo', slug=artigo.slug, id=artigo.id) }} </link>
+                <author>{{ artigo.user.username }}</author>
+                {% for tag in artigo.tags %}
+        		    <category>{{ tag.nome }}</category>
+                {% endfor %}
+    		</item>
+        {% endfor %}
+    </channel>
+</rss>
