@@ -57,7 +57,7 @@ def index():
 def busca():
     offset = 10
     page = int(request.args.get('page', 1))
-    q = str(request.args.get('q', None))
+    q = str(request.args.get('q', ''))
 
     if len(q) == 0:
         return redirect(url_for('blog.index'))

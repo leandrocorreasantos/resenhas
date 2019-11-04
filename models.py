@@ -54,6 +54,8 @@ class Artigo(db.Model):
     data_publicacao = db.Column(db.DateTime(), default=datetime.now())
     data_atualizacao = db.Column(db.DateTime(), default=datetime.now())
     cliques = db.Column(db.Integer(), server_default='0')
+    meta_keywords = db.Column(db.String(100))
+    meta_description = db.Column(db.String(255))
     tags = db.relationship(
         'Tag',
         secondary='artigos_tags',

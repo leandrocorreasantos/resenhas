@@ -24,6 +24,8 @@ class ArtigoForm(FlaskForm):
     )
     capa = FileField('Capa')
     list_tags = StringField('Tags')
+    meta_keywords = StringField(u'Palavras-Chave')
+    meta_description = StringField(u'Descrição Breve')
     submit = SubmitField('Salvar')
 
 
