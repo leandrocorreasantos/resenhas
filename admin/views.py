@@ -26,7 +26,9 @@ admin = Blueprint(
 @login_required
 @roles_required(['admin', 'editor', 'writer'])
 def list_artigos():
-    artigos = Artigo.query.all()
+    artigos = Artigo.query.order_by(
+        Artigo.data_publicacao.desc()
+    ).all()
     return render_template(
         'artigos.html', artigos=artigos, title_page='Artigos'
     )
