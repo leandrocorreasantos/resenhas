@@ -1,0 +1,57 @@
+<div class="col-lg-4">
+  <div class="sidebars-area">
+
+    <div class="single-sidebar-widget most-popular-widget">
+      <h6 class="title">Mais Populares</h6>
+      {% for p in artigos_populares %}
+      <div class="single-list flex-row d-flex">
+        <div class="thumb">
+          <img src="{{ url_for('static', filename=p.capa) }}" alt="" width="100px" height="80px">
+        </div>
+        <div class="details">
+          <a href="{{ url_for('blog.artigo', id=p.id, slug=p.slug) }}">
+            <h6>{{ p.titulo }}</h6>
+          </a>
+          <ul class="meta">
+            <li><a href="#"><span class="lnr lnr-calendar-full"></span>{{ p.data_publicacao.strftime('%d-%m-%Y') }}</a></li>
+            <li><a href="#"><span class="lnr lnr-eye"></span>{{ p.cliques }} Visualizações</a></li>
+          </ul>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="single-sidebar-widget ads-widget">
+      <iframe data-aa="1120278" src="//ad.a-ads.com/1120278?size=300x250"
+      scrolling="no" style="width:300px; height:250px; border:0px; padding:0;
+      overflow:hidden" allowtransparency="true"></iframe>
+    </div>
+
+    <div class="single-sidebar-widget most-popular-widget">
+      <h6 class="title">Mais Recentes</h6>
+      {% for r in artigos_recentes %}
+      <div class="single-list flex-row d-flex">
+        <div class="thumb">
+          <img src="{{ url_for('static', filename=r.capa) }}" alt="" width="100px" height="80px">
+        </div>
+        <div class="details">
+          <a href="{{ url_for('blog.artigo', id=r.id, slug=r.slug) }}">
+            <h6>{{ r.titulo }}</h6>
+          </a>
+          <ul class="meta">
+            <li><a href="#"><span class="lnr lnr-calendar-full"></span>{{ r.data_publicacao.strftime('%d-%m-%Y') }}</a></li>
+            <li><a href="#"><span class="lnr lnr-eye"></span>{{ r.cliques }} Visualizações</a></li>
+          </ul>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="single-sidebar-widget ads-widget">
+        <iframe data-aa="1120278" src="//ad.a-ads.com/1120278?size=300x250"
+        scrolling="no" style="width:300px; height:250px; border:0px; padding:0;
+        overflow:hidden" allowtransparency="true"></iframe>
+    </div>
+
+  </div>
+</div>
