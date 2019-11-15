@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="site-main-container">
+
+    <!-- Start top-post Area -->
+    <!-- End top-post Area -->
+
+    <!-- Start latest-post Area -->
+    <section class="latest-post-area pb-120">
+        <div class="container no-padding">
+            <div class="row">
+                <div class="col-lg-8 post-list">
+                    <!-- Start latest-post Area -->
+                    <div class="latest-post-wrap">
+                        <h4 class="cat-title">
+                            Resultados da busca por '{{ q }}'
+                        </h4>
+                        <div id="listar_artigos">
+                            {% include "_list_artigos.html" %}
+                        </div>
+
+                        {% if artigos|length == 10 %}
+                        <div class="load-more" id="paginador">
+                            <button class="primary-btn">Mais Resultados</button>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- Start banner-ads Area -->
+                    <div class="col-lg-12 ad-widget-wrap mt-30 mb-30">
+                        <iframe data-aa="1266548" src="//ad.a-ads.com/1266548?size=728x90"
+                        scrolling="no" style="width:728px; height:90px; border:0px; padding:0;
+                        overflow:hidden" allowtransparency="true"></iframe>
+                    </div>
+                    <!-- End banner-ads Area -->
+
+                </div>
+                {% include "sidebar.html" %}
+            </div>
+        </div>
+    </section>
+    <!-- End latest-post Area -->
+</div>
+{% endblock %}
+{% block javascript %}
+<!-- @TODO: disable button if end of line -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        var page = 1;
+        var offset = 10;
+        var q = '{{ q }}';
+        $("input#Search-box").val(q);
+        $("div#paginador > button").click(function(){
+            page += 1;
+            var url = '?q='+q+'&page='+page;
+            $.get(url).done(function(res){
+                $("div#listar_artigos").append(res);
+                var total = $(res).filter('.single-latest-post').length;
+                if(total < offset){
+                    $("div#paginador").slideUp(1500);
+                }
+            }).fail(function(){
+                $("div#paginador").slideUp(1500);
+            });
+        });
+    });
+</script>
+{% endblock %}

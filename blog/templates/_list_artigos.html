@@ -1,0 +1,41 @@
+{% if artigos %}
+    {% for artigo in artigos %}
+    <div class="single-latest-post row align-items-center">
+        <div class="col-lg-5 post-left">
+            <div class="feature-img relative">
+                <div class="overlay overlay-bg"></div>
+                <img class="img-fluid" src="{{ url_for('static', filename=artigo.capa) }}" alt="">
+            </div>
+            <ul class="tags">
+                {% for tag in artigo.tags %}
+                <li><a href="#">{{ tag.nome }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-7 post-right">
+            <a href="{{ url_for('blog.artigo', id=artigo.id, slug=artigo.slug) }}">
+                <h4>{{ artigo.titulo }}</h4>
+            </a>
+            <ul class="meta">
+                <li><a href="#"><span class="lnr lnr-user"></span>{{ artigo.user.first_name }}</a></li>
+                <li><a href="#"><span class="lnr lnr-calendar-full"></span>{{ artigo.data_publicacao.strftime('%d-%m-%Y %H:%M') }}</a></li>
+                <li><a href="#"><span class="lnr lnr-eye"></span>{{ artigo.cliques }} Visualizações</a></li>
+            </ul>
+            <p class="excert">
+                {{ artigo.conteudo|striptags|truncate(120) }}
+            </p>
+        </div>
+        {% if loop.index is divisibleby 5 %}
+            <!-- Start banner-ads Area -->
+            <div class="col-lg-12 ad-widget-wrap mt-30 mb-30">
+                <iframe data-aa="1266548" src="//ad.a-ads.com/1266548?size=728x90"
+                scrolling="no" style="width:728px; height:90px; border:0px; padding:0;
+                overflow:hidden" allowtransparency="true"></iframe>
+            </div>
+            <!-- End banner-ads Area -->
+        {% endif %}
+    </div>
+    {% endfor %}
+
+{% endif %}
+<!-- End latest-post Area -->
