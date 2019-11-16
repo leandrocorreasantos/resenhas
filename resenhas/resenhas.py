@@ -4,9 +4,9 @@ from sqlalchemy import distinct
 from datetime import datetime
 from flask import Flask, send_from_directory, render_template, make_response
 from . import db, migrate, bootstrap, mail
-from .errors.handlers import errors
-from .admin.views import admin
-from .blog.views import blog
+from errors.handlers import errors
+from admin.views import admin
+from blog.views import blog
 from .models import User, Artigo
 from flask_user import UserManager
 

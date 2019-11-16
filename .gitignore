@@ -117,7 +117,11 @@ venv/
 .env
 env/
 .idea
-static/media/blog/img/artigos/*
+resenhas/static/media/blog/img/artigos/*
 
 # mysql database
 mysql/
+
+# vim files
+*.swp
+*.swa
