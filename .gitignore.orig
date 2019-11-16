@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 
+>>>>>>> d1066d873f58dc55eb243dbff08de8ba196f3600
 # Created by https://www.gitignore.io/api/flask
 # Edit at https://www.gitignore.io/?templates=flask
 
@@ -118,11 +121,6 @@ venv/
 env/
 .idea
 <<<<<<< HEAD
-static/media/blog/img/artigos/*
-
-# mysql database
-mysql/
-=======
 resenhas/static/media/blog/img/artigos/*
 
 # mysql database
@@ -131,4 +129,10 @@ mysql/
 # vim files
 *.swp
 *.swa
->>>>>>> develop
+*.orig
+=======
+static/media/blog/img/artigos/*
+
+# mysql database
+mysql/
+>>>>>>> d1066d873f58dc55eb243dbff08de8ba196f3600
