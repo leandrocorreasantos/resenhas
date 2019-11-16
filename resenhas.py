@@ -11,6 +11,11 @@ from .models import User, Artigo
 from flask_user import UserManager
 
 
+dotenv_path = os.path.join(os.getcwd(), '.env')
+if os.path.isfile(dotenv_path):
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path)
+
 SITE_URL = os.environ.get('SITE_URL')
 
 
