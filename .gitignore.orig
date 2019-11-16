@@ -117,6 +117,12 @@ venv/
 .env
 env/
 .idea
+<<<<<<< HEAD
+static/media/blog/img/artigos/*
+
+# mysql database
+mysql/
+=======
 resenhas/static/media/blog/img/artigos/*
 
 # mysql database
@@ -125,4 +131,4 @@ mysql/
 # vim files
 *.swp
 *.swa
-*.orig
+>>>>>>> develop
