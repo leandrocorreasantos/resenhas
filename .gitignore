@@ -125,3 +125,4 @@ mysql/
 # vim files
 *.swp
 *.swa
+*.orig
