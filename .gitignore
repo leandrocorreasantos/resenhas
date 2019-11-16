@@ -121,3 +121,7 @@ resenhas/static/media/blog/img/artigos/*
 
 # mysql database
 mysql/
+
+# vim files
+*.swp
+*.swa
