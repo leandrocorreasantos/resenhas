@@ -6,12 +6,6 @@ from enum import Enum
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-dotenv_path = os.path.join(os.getcwd(), '.env')
-if os.path.isfile(dotenv_path):
-    from dotenv import load_dotenv
-    load_dotenv(dotenv_path)
-
-
 class MediaConfig(Enum):
     # upload
     STATIC_DIR = os.path.join(basedir, 'static')

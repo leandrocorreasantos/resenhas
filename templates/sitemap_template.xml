@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% for artigo in artigos %}
+    <url>
+        <loc>{{site}}{{ url_for('blog.artigo', slug=artigo.slug, id=artigo.id) }}</loc>
+        <lastmod>{{artigo.data_atualizacao}}</lastmod>
+        <priority>0.7</priority>
+    </url>
+    {% endfor %}
+</urlset>

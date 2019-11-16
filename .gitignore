@@ -116,6 +116,7 @@ venv/
 .env
 env/
 .idea
+
 resenhas/static/media/blog/img/artigos/*
 
 # mysql database
