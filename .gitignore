@@ -126,3 +126,9 @@ mysql/
 *.swp
 *.swa
 *.orig
+
+# trash files
+.DS_Store
+
+# wsgi config
+*.wsgi

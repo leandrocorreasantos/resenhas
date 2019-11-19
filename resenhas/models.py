@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_user import UserMixin
-from resenhas import db
+from resenhas.utils import db
 from datetime import datetime
 from slugify import slugify
 
