@@ -1,3 +1,4 @@
+
 _config-env:
 	[ -f .env ] || cp .env.sample .env
 
@@ -16,19 +17,25 @@ upgrade-pip:
 setup: upgrade-pip
 	pip install -r requirements-local.txt
 
-run:
-	flask run
+start:
+	python resenhas/app.py
 
-start: run
+run:
+	start
 
 migrate-init:
-	flask db init
+	python resenhas/migrate.py db init
 
 migrate:
-	flask db migrate
+	python resenhas/migrate.py db migrate
 
 migrate-apply:
-	flask db upgrade
+	python resenhas/migrate.py db upgrade
 
 migrate-rollback:
-	flask db downgrade -1
+	python resenhas/migrate.py db downgrade -1
+
+seed:
+	python resenhas/migrate.py seed
+
+# last migrate version c238f53b4e83

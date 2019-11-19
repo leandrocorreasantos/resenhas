@@ -2,9 +2,7 @@
 import os
 from enum import Enum
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 
 dotenv_path = os.path.join(os.getcwd(), '.env')
 if os.path.isfile(dotenv_path):
@@ -30,17 +28,20 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # flask-user
     USER_APP_NAME = "Resenhas de Filmes"
-    USER_ENABLE_EMAIL = True      # Disable email authentication
+    # Disable email authentication
+    USER_ENABLE_EMAIL = os.environ.get('USER_ENABLE_EMAIL')
     USER_ENABLE_USERNAME = True    # Enable username authentication
     USER_REQUIRE_RETYPE_PASSWORD = False    # Simplify register form
-    USER_ENABLE_REGISTER = True
+    USER_ENABLE_REGISTER = os.environ.get('USER_ENABLE_REGISTER')
     USER_EMAIL_SENDER_EMAIL = 'contato@resenhasdefilmes.com.br'
     USER_EMAIL_SENDER_NAME = 'Resenhas de Filmes'
     # flask-mail @TODO: change parameters on deploy
+    USER_ENABLE_CONFIRM_EMAIL = os.environ.get('USER_ENABLE_CONFIRM_EMAIL')
     MAIL_SERVER = os.environ.get('MAIL_SMTP_SERVER')
     MAIL_PORT = os.environ.get('MAIL_SMTP_PORT')
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+    USER_ALLOW_LOGIN_WITHOUT_CONFIRMED_EMAIL = os.environ.get('CONFIRM_EMAIL')
     MEDIA_ROOT = MediaConfig.MEDIA_ROOT
     ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
